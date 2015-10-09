@@ -96,7 +96,6 @@ def output_csv(data, filename) :
 
 def points_from_pairs(sub = ""):
     folder = os.getcwd()
-    folder = os.path.join(folder, 'data')
     if sub != "":
         folder = os.path.join(folder, sub)
     files = find_all_files(folder, '.csv')
@@ -111,7 +110,6 @@ def points_from_pairs(sub = ""):
 
 def points_from_single_file(sub = "") :
     folder = os.getcwd()
-    folder = os.path.join(folder, 'data')
     if sub != "":
         folder = os.path.join(folder, sub)
     files = find_all_files(folder, '.csv')
@@ -162,7 +160,7 @@ def show_image(points_list) :
 
 def test_image(filename, sub, pair = True):
     folder = os.getcwd()
-    folder = os.path.join(folder, 'data/' + sub)
+    folder = os.path.join(folder, sub)
     if pair:
         f1, f2 = os.path.join(folder, filename + '.csv'), os.path.join(folder, filename+'s.csv')
         d1 = read_file(os.path.join(folder, f1))
@@ -206,7 +204,6 @@ def test_image(filename, sub, pair = True):
 
 def output_all_image(sub, pair = True):
     folder = os.getcwd()
-    folder = os.path.join(folder, "data")
     folder = os.path.join(folder, sub)
     files = find_all_files(folder, '.csv')
     if pair:
