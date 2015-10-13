@@ -69,8 +69,8 @@ def check_segment_crossing(p1,p2,q1,q2) :
     q = Segment(q1, q2)
     return len(p.intersection(q)) > 0
 
-def find_all_files(folder, ext):
-    files = [f for f in os.listdir(folder) if os.path.splitext(f)[-1] == ext]
+def find_all_files(folder, ext, func = str.endswith):
+    files = [f for f in os.listdir(folder) if func(f, ext)]
     return files
 
 def make_file_pairs(files) :
@@ -120,7 +120,7 @@ def points_from_single_file(sub = "") :
         p2 = [v for i,v in enumerate(p) if i % 2]
         yield (f,) +  compute(p1, p2)
 
-def run(sub = "", pair = True):
+def run(sub, output, pair = True):
     out_l = {'file':[], 'length':[]}
     out_d = {'file':[], 'dist':[]}
     if pair:
@@ -133,18 +133,20 @@ def run(sub = "", pair = True):
         out_d['file'] += [f for i in d]
         out_d['dist'] += d
 
-    output_csv(out_l, sub + 'output_length.csv')
-    output_csv(out_d, sub + 'output_dist.csv')
+    output_csv(out_l, os.path.join(output, os.path.basename(sub) + '_output_length.csv'))
+    output_csv(out_d, os.path.join(output, os.path.basename(sub) + '_output_dist.csv'))
 
 
-def show_histogram() :
-    data = pandas.read_csv("output_0908/output_dist.csv")
-    length = [data['dist'][i] for i,v in enumerate(data['file']) ]
-    plt.hist(length, bins=150)
-    plt.show()
-    ndata = numpy.array(length)
+def show_histogram(csv) :
+    data = pandas.read_csv(csv)
+    plt.figure()
+    plt.hist(data['value'], bins=50)
+    plt.title(os.path.basename(csv))
+    ndata = numpy.array(data['value'])
     print ndata.mean()
     print ndata.var()
+    plt.savefig(csv +'.png')
+    plt.close()
 
 def show_image(points_list) :
     plt.figure()
@@ -214,11 +216,19 @@ def output_all_image(sub, pair = True):
         for f in files:
             test_image(os.path.splitext(f)[0], sub, pair)
 
+def plot_image(sub):
+    folder = os.getcwd()
+    folder = os.path.join(folder, sub)
+    files = find_all_files(folder, '_selection.csv', str.endswith)
+    for f in files:
+        show_histogram(os.path.join(folder, f))
 
 if __name__ == '__main__':
     logging.info('*******    run    *******')
     logging.info(' '.join(sys.argv[1:]))
     if sys.argv[1] == 'run':
-        run(sys.argv[2], eval(sys.argv[3]))
+        run(sys.argv[2], sys.argv[4], eval(sys.argv[3]))
     elif sys.argv[1] == 'image':
         output_all_image(sys.argv[2], eval(sys.argv[3]))
+    elif sys.argv[1] == 'plot':
+        plot_image(sys.argv[2])

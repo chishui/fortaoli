@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+from compute import *
 
 def convert_xls_to_csv():
     import xlrd
@@ -28,14 +29,16 @@ def reform_file_name(filename, fm, to) :
     return filename.replace(fm, to)
 
 def change_file_name(folder) :
-    files = os.listdir(folder)
+#    files = os.listdir(folder)
+    files = find_all_files(folder, '.csv')
     for f in files:
         nf = reform_file_name(f, '_', '-')
         print f, nf
         os.rename(os.path.join(folder, f),  os.path.join(folder, nf))
 
 def convert_file_delimiter(folder) :
-    files = os.listdir(folder)
+    #files = os.listdir(folder)
+    files = find_all_files(folder, '.csv')
     for f in files:
         convert_delimiter(os.path.join(folder, f), '\t', ',')
 
@@ -44,7 +47,7 @@ def convert_file_delimiter(folder) :
 if __name__ == '__main__' :
     if len(sys.argv) > 1:
         data = sys.argv[1]
-        folder = os.path.join(os.getcwd(), "data")
+        folder = os.getcwd()
         folder = os.path.join(folder, data)
         change_file_name(folder)
         convert_file_delimiter(folder)

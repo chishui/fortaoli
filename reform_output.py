@@ -13,7 +13,7 @@ def generate_50_min_variance(data) :
 
 
 def generate_50_random(data) :
-    return numpy.random.choise(data)
+    return numpy.random.choice(data, 50)
 
 
 def reform_output(sub, generate_function) :
@@ -37,7 +37,9 @@ def reform_output(sub, generate_function) :
                 continue
             output_data[k] = generate_function(v)
 
-        with open(os.path.join(folder, os.path.splitext(f)[0] + '_selection.csv'), 'w') as fout:
+        postfix = '_selection.csv' if sys.argv[2] == 'closest' else '_random_selection.csv'
+        with open(os.path.join(folder, os.path.splitext(f)[0] + postfix), 'w') as fout:
+            fout.write('tag,value\n')
             for k,v in output_data.items():
                 for i in v:
                     fout.write(k)
