@@ -21,26 +21,29 @@ def run(folder, output = None, include = [1, 2, 3, 4, 5]):
     if not output:
         output = os.path.join(folder, output_folder_name())
     output = os.path.abspath(output)
+    if not os.path.exists(output) :
+        os.mkdir(output)
 
-    # reform file names
+    print "reform file names"
     if 1 in include:
         for sub in subfolders:
             os.system("python help.py \"" + sub + "\"")
 
-    # run compute distances
+    print "run compute distances"
     if 2 in include:
         for sub in subfolders:
             os.system("python compute.py run \"" + sub + "\" False \"" + output + "\"")
 
-    # output images
+    print "output images"
     if 3 in include:
         for sub in subfolders:
             os.system("python compute.py image \"" + sub + "\" False \"")
 
-	# selection and output distributed images
+    print "selection and output distributed images"
     if 4 in include:
         os.system("python reform_output.py \"" + output + "\" random")
 
+    print "output distributive images"
     if 5 in include:
         print "python compute.py plot \"" + output + '\"'
         os.system("python compute.py plot \"" + output + '\"')
