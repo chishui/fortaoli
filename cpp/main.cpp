@@ -89,10 +89,11 @@ std::vector<float> compute_distance(const std::vector<Point> & vPts)
 
 void to_csv(const std::string & name, const std::string & filename, std::string tag, const std::vector<float>& v)
 {
+  struct stat st;
+  bool file_exist = (stat(filename.c_str(), &st) == 0);
   std::ofstream ofs;
   ofs.open(filename, std::ofstream::out | std::ofstream::app);
-  struct stat st;
-  if (stat("/tmp",&st) != 0)
+  if (!file_exist)
     ofs << "file," << tag <<"\n";
   for (size_t i = 0; i < v.size(); ++i)
   {
