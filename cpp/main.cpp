@@ -112,7 +112,7 @@ extern "C" DLL_PUBLIC void compute(const char * pszfilename, const char * in_out
   std::string output_folder(in_output_folder);
   std::string name = get_filename(filename);
   to_csv(name, path_join(output_folder, get_filename(output_folder) +  "_length.csv"), "length", lengths); 
-  to_csv(name, path_join(output_folder, get_filename(output_folder) +  "_dist.csv"), "dist", lengths); 
+  to_csv(name, path_join(output_folder, get_filename(output_folder) +  "_dist.csv"), "dist", distances); 
 }
 
 
